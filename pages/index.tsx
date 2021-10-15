@@ -4,6 +4,9 @@ import Image from 'next/image';
 import {widget, axiosFetcher} from "../services/api.service";
 import useSWR from "swr";
 
+import _ from 'lodash';
+import DOMPurify from 'dompurify';
+
 const Home: NextPage = () => {
 
     const swrResponse = useSWR('/', axiosFetcher);
@@ -21,7 +24,7 @@ const Home: NextPage = () => {
 
 
                 widget(swrResponse, (data: any) => {
-                    const posts = data.map(p => {
+                    let posts = data.map(p => {
                         return {
                             id: p.nid[0].value,
                             type: p.type[0].target_id,
@@ -33,13 +36,19 @@ const Home: NextPage = () => {
                         };
                     });
 
+                    //sanitize:
+                    posts = posts.map(p=>{
+                        p.body = _.unescape(DOMPurify.sanitize(p.body ?? "<div></div>", {SAFE_FOR_JQUERY: true}));
+                        return p;
+                    });
+
                     console.log(posts);
 
                     return posts.map(p => {
                         return (<div key={'p-' + p.id}>
                             <h4>{p.title}</h4>
-                            <div>
-                                {p.body}
+                            <div
+                                dangerouslySetInnerHTML={{__html: p.body}}>
                             </div>
                         </div>);
                     });
