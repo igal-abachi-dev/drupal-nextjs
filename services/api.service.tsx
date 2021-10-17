@@ -2,6 +2,8 @@
 import Axios from "axios";
 import useSWR ,{ SWRConfig, SWRResponse } from "swr";
 
+const isSSR = typeof window === "undefined";
+
 
 export const axiosFetcher = async (url) => {
     try {

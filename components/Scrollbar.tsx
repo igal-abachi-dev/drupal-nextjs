@@ -45,7 +45,7 @@ const Scrollbar = props => {
     return (
         <div
             className={classNames( )}
-            style={{ position: 'relative' ,height: '100px'}}
+            style={{ position: 'relative'}}
             {...attributes}
             ref={ref}
         />
