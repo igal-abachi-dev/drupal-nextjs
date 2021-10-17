@@ -6,6 +6,7 @@ import useSWR from "swr";
 
 import _ from 'lodash';
 import DOMPurify from 'dompurify';
+import Scrollbar from "../components/Scrollbar";
 
 const Home: NextPage = () => {
 
@@ -39,19 +40,24 @@ const Home: NextPage = () => {
                     //sanitize:
                     posts = posts.map(p=>{
                         p.body = _.unescape(DOMPurify.sanitize(p.body ?? "<div></div>", {SAFE_FOR_JQUERY: true}));
+                        //p.title = _.unescape(DOMPurify.sanitize(p.title ?? "", {SAFE_FOR_JQUERY: true}));
                         return p;
                     });
 
                     console.log(posts);
 
-                    return posts.map(p => {
-                        return (<div key={'p-' + p.id}>
-                            <h4>{p.title}</h4>
-                            <div
-                                dangerouslySetInnerHTML={{__html: p.body}}>
-                            </div>
-                        </div>);
-                    });
+                    return (<Scrollbar>
+                        {
+                            posts.map(p => {
+                                return (<div key={'p-' + p.id}>
+                                    <h4>{p.title}</h4>
+                                    <div
+                                        dangerouslySetInnerHTML={{__html: p.body}}>
+                                    </div>
+                                </div>)
+                            })
+                        }
+                    </Scrollbar>);
                 })
             }
 
