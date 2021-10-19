@@ -10,9 +10,15 @@ import DOMPurify from 'dompurify';
 
 import Scrollbar from "../components/Scrollbar";
 
+import {useAtom} from "jotai";
+import {GlobalAppAtom} from "../atoms/store";
+import { DateTime , Settings} from 'luxon';
+
 const Home: NextPage = () => {
 
     const isSSR = typeof window === "undefined";
+    Settings.defaultLocale= "he-IL";
+    Settings.defaultZone ="Israel";//Asia/Jerusalem //UTC
 
     const swrResponse = useSWR('/', axiosFetcher /*, { suspense: true }*/);
 //https://swr.vercel.app/docs/suspense
@@ -37,6 +43,9 @@ const QuillNoSSRWrapper = dynamic(import('react-quill'), {
 })
     */
 
+
+    const [globalAppAtom, setGlobalAppAtom] = useAtom(GlobalAppAtom);
+    console.log(globalAppAtom);
     return (
         <div>
             <Head>
@@ -76,7 +85,11 @@ const QuillNoSSRWrapper = dynamic(import('react-quill'), {
                     return (<Scrollbar>
                         {
                             posts.map(p => {
-                                return (<div key={'p-' + p.id}>
+                                return (<div key={'p-' + p.id} onMouseOver={e =>
+                                    setGlobalAppAtom(x => {
+                                        x.light = !x.light;
+                                        x.lastUpdate = DateTime.now().toString()
+                                    })}>
                                     <h4>{p.title}</h4>
                                     <div
                                         dangerouslySetInnerHTML={{__html: p.body}}>
