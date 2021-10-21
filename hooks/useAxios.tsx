@@ -107,7 +107,7 @@ export class HttpApi implements IHttpApi {
             })
             .then(res => res.data as T)
             .catch(err => {
-                console.log('GET: ',url, err);
+                console.error('GET: ',url, err);
                 return err.response.data; // throw err; ?
             });
     }
@@ -125,7 +125,7 @@ export class HttpApi implements IHttpApi {
             })
             .then(res => res.data as T)
             .catch(err => {
-                console.log('POST: ',url, err);
+                console.error('POST: ',url, err);
                 return err.response.data;
             });
     }
@@ -141,7 +141,7 @@ export class HttpApi implements IHttpApi {
             })
             .then(res => res.data as T)
             .catch(err => {
-                console.log('PATCH: ',url, err);
+                console.error('PATCH: ',url, err);
                 return err.response.data;
             });
     }
@@ -157,7 +157,7 @@ export class HttpApi implements IHttpApi {
             })
             .then(res => res.data as T)
             .catch(err => {
-                console.log('PUT: ',url, err);
+                console.error('PUT: ',url, err);
                 return err.response.data;
             });
     }
@@ -173,7 +173,7 @@ export class HttpApi implements IHttpApi {
             })
             .then(res => res.data as T)
             .catch(err => {
-                console.log('DELETE: ',url, err);
+                console.error('DELETE: ',url, err);
                 return err.response.data;
             });
     }
