@@ -20,9 +20,9 @@ function MyApp({Component, pageProps}: AppProps) {
 
     return (<Provider> {/*initialValues={initialState && [[GlobalAppAtom, initialState]]}*/}
 
-        <SsrSuspense fallback={<h2>Loading...</h2>}>
+        {/*<SsrSuspense fallback={<h2>Loading...</h2>}>*/}
             <Component {...pageProps} />
-        </SsrSuspense>
+        {/*</SsrSuspense>*/}
     </Provider>);
 }
 
