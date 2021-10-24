@@ -1,7 +1,7 @@
-import {useAtom} from "jotai";
-import {GlobalAppAtom} from "../atoms/store";
 import {DateTime} from 'luxon';
 import {sanitize} from "../hooks/useAxios";
+import {toggleLight, setLastUpdate} from "../state/globalStateSlice";
+import {useAppDispatch} from "../hooks/redux-hooks";
 
 
 const mapToBlogPost = (p: any, sanitize: (text: string) => string) => {
@@ -22,36 +22,33 @@ const mapToBlogPost = (p: any, sanitize: (text: string) => string) => {
 };
 
 
-export function AllPostsRenderer(data: any) {
+export function AllPostsRenderer(data: any,dispatch:any) {
     // if (data == null || data.length == 0)
     //     return null;
+
 
     const posts = data.map(p => mapToBlogPost(p, sanitize));
     //console.log(posts);
 
 
     return posts.map(p => {
-        return PostRenderer(p, true);
+        return PostRenderer(p, true, dispatch);
     });//.filter(p => p != null);
 };
 
 
-export function PostRenderer(data: any, wasMapped = false) {
+export function PostRenderer(data: any, wasMapped = false, dispatch: any) {
+
     // if (data == null)
     //     return null;
 
     let p = wasMapped ? data : mapToBlogPost(data, sanitize);
     //console.log(p);
 
-    //const [globalAppAtom, setGlobalAppAtom] = useAtom(GlobalAppAtom);
-
-    return (<div key={'p-' + p.id}>
-        {
-            //              onMouseOver={e => setGlobalAppAtom(x => {
-            //     x.light = !x.light;
-            //     x.lastUpdate = DateTime.now().toString()
-            // })}>
-        }
+    return (<div key={'p-' + p.id} onMouseOver={e => {
+        dispatch(toggleLight());
+        dispatch(setLastUpdate(DateTime.now().toString()));
+    }}>
         <h4>{p.title}</h4>
         <div
             dangerouslySetInnerHTML={{__html: p.body}}>

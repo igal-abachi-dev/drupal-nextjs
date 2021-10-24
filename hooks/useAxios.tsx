@@ -1,4 +1,3 @@
-import {useAtom} from 'jotai';
 import {useEffect, useState} from 'react';
 import axios, {AxiosInstance, AxiosResponse} from 'axios';
 import qs from 'qs';
@@ -50,7 +49,7 @@ export class HttpApi implements IHttpApi {
         // login takes up to 5 sec
         this.axClient.defaults.withCredentials = false; //?
 
-        axios.interceptors.response.use(function (res) {
+        this.axClient.interceptors.response.use(function (res) {
             // if(res.headers['custom-Header'] == 'qwerty123'){
             //     //do action...
             // }
@@ -114,6 +113,7 @@ export class HttpApi implements IHttpApi {
 
     async post<T>(url: string, data: any): Promise<T> {
         if (isSSR || this.axClient == null) {
+      // @ts-ignore
             return Promise.resolve(null);
         }
         //transformRequest() -> stringifySafely() -> does JSON.stringify(data);
@@ -132,6 +132,7 @@ export class HttpApi implements IHttpApi {
 
     async patch<T>(url: string, data: any): Promise<T> {
         if (isSSR || this.axClient == null) {
+      // @ts-ignore
             return Promise.resolve(null);
         }
         return await this.axClient.patch(`${url}`, data)
@@ -148,6 +149,7 @@ export class HttpApi implements IHttpApi {
 
     async put<T>(url: string, data: any): Promise<T> {
         if (isSSR || this.axClient == null) {
+      // @ts-ignore
             return Promise.resolve(null);
         }
         return await this.axClient.put(`${url}`, data)
@@ -164,6 +166,7 @@ export class HttpApi implements IHttpApi {
 
     async delete<T>(url: string): Promise<T> {
         if (isSSR || this.axClient == null) {
+      // @ts-ignore
             return Promise.resolve(null);
         }
         return await this.axClient.delete(`${url}`)

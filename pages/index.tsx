@@ -1,37 +1,43 @@
 import type {NextPage} from 'next';
+import React from 'react';
 import Head from 'next/head';
-import {AxiosFetcher,  widget} from "../services/api.service";
+import Image from 'next/image';
+
+import {AxiosFetcher, Widget} from "../services/api.service";
+
+import {selectLight, selectLastUpdate, selectGlobalState} from "../state/globalStateSlice";
+import {useAppDispatch, useAppSelector} from "../hooks/redux-hooks";
+
 
 import _ from 'lodash';
 import DOMPurify from 'dompurify';
 //window.DOMPurify || (window.DOMPurify = require('dompurify').default || require('dompurify'));
 import Scrollbar from "../components/Scrollbar";
 
-import {useAtom} from "jotai";
-import {GlobalAppAtom} from "../atoms/store";
 import {Settings} from 'luxon';
 import {AllPostsRenderer, PostRenderer} from "../components/renderers";
 import useSWR, {SWRResponse} from "swr";
 
+//import styles from '../styles/Home.module.css';
+
 const isSSR = typeof window === "undefined";
 
 const Home: NextPage = () => {
-
     const isSSR = typeof window === "undefined";
+
+    const light:boolean = useAppSelector(selectLight);
+    const lastUpdate:string = useAppSelector(selectLastUpdate);
+    console.log({
+        light,
+        lastUpdate
+    });
+
     Settings.defaultLocale = "he-IL";
     Settings.defaultZone = "Israel";//Asia/Jerusalem //UTC
 
 
-
 //https://swr.vercel.app/docs/suspense
 
-    //https://codesandbox.io/s/github/pmndrs/jotai/tree/main/examples/hacker_news?file=/src/App.tsx
-
-    //https://codesandbox.io/s/nextjs-with-jotai-5ylrj?file=/components/Clock.js
-
-    //https://github.com/vercel/next.js/blob/canary/examples/with-jotai/pages/index.tsx
-
-    //https://github.com/pmndrs/jotai
 
 //    https://github.com/reactwg/react-18/discussions/37
 
@@ -50,22 +56,23 @@ const QuillNoSSRWrapper = dynamic(import('react-quill'), {
 
 // <Suspense fallback={<Spinner />}>
 
-    // const [globalAppAtom, setGlobalAppAtom] = useAtom(GlobalAppAtom);
-    // console.log(globalAppAtom);
+    //  const [globalAppAtom, setGlobalAppAtom] = useAtom(GlobalAppAtom);
+    //  console.log(globalAppAtom);
 
 
-    const swrResponse = useSWR(`/`,  AxiosFetcher,{revalidateOnFocus :false});
+    const swrResponse = useSWR(`/`, AxiosFetcher, {revalidateOnFocus: false});
 
     return (
         <div>
             <Head>
                 <title>Next App</title>
                 <meta name="description" content=""/>
+                <link rel="icon" href="/favicon.ico"/>
             </Head>
 
             <Scrollbar>
                 {
-                    widget(swrResponse, AllPostsRenderer)
+                    Widget(swrResponse, AllPostsRenderer)
                 }
             </Scrollbar>
 
